@@ -1,0 +1,61 @@
+{% extends "agenttemplates/agents_header.html" %}
+{% block content %}
+
+
+<!-- Address -->
+
+<div class="container-fluid">
+    <div class="card">
+    <div class="card-header">
+        <h2>My Affiliate Links</h2>
+    </div>
+
+    <div class="card-body">
+
+
+        <div class="list-group" style="background: #e8e8e8;">
+            <button type="button" class="list-group-item list-group-item-action active">
+                Neteller Links
+            </button>
+
+            <table class="table">
+                {% for ids in net_siteids %}
+                <tr>
+                    <td><span class="badge badge-success"><h3>{{ids.site_id}}</h3></span></td>
+                    <td><input type="text" value="http://wlnetelleragents.adsrv.eacdn.com/C.ashx?btag=a_{{ids.site_id}}_500c_&affid=34348&siteid={{ids.site_id}}&adid=500&c=" class="form-control"
+                               style="padding: 10px; color: mediumblue;"></td>
+                </tr>
+
+                {% endfor %}
+
+            </table>
+
+
+        </div>
+
+        <div class="list-group" style="margin-top: 50px; background: #e8e8e8;">
+            <button type="button" class="list-group-item list-group-item-action active">
+                Skrill Links
+            </button>
+
+            <table class="table">
+                {% for ids in skr_siteids %}
+                <tr>
+                    <td><span class="badge badge-danger"><h3>{{ids.site_id}}</h3></span></td>
+                    <td><input type="text" value="https://account.skrill.com/signup/page1?promo_id={{ids.site_id}}&rid=40912705" class="form-control"
+                               style="padding: 10px; color: mediumblue;"></td>
+                </tr>
+
+                {% endfor %}
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+</div>
+
+
+{% endblock %}

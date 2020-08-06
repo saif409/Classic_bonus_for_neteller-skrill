@@ -1,0 +1,122 @@
+{% extends "agenttemplates/agents_header.html" %}
+{% block content %}
+
+{% load static %}
+
+<div class="row container">
+    <div class="col-md-12">
+
+        <div class="card">
+
+
+            <div class="card-body">
+
+
+                <br/>
+                <H3>Editing Account : {{agents_profile.username}} </H3>
+
+
+                {% if userupdateresponse %}
+                <div class="alert alert-primary" role="alert" style="margin: 20px 0px 20px 0px;">
+                    <H3 style="color: white;">{{userupdateresponse}}</H3>
+                </div>
+                {% endif %}
+
+
+
+                <form action="{% url 'profile' %}" method="post">
+                    {% csrf_token %}
+                    <table class="table table-bordered">
+                        <tbody>
+                        <tr>
+                            <th>First Name</th>
+                            <td><input type="text" class="form-control" value="{{agents_profile.fname}}"
+                                       name="update_firstname"/></td>
+
+                            <th>Last Name</th>
+                            <td><input type="text" class="form-control" value="{{agents_profile.lname}}"
+                                       name="update_lastname"/></td>
+                        </tr>
+
+
+                        <tr>
+                            <th>User Name</th>
+                            <td><input disabled class="form-control" type="text" value="{{agents_profile.username}}"
+                                       name="update_username"/>
+                            </td>
+                            <th>Email </th>
+                            <td>
+                                <input type="email" class="form-control" value="{{agents_profile.email}}"
+                                       name="update_email"/>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th>Neteller Email</th>
+                            <td>
+                                <input type="email" class="form-control" value="{{agents_profile.neteller_email}}"
+                                       name="update_neteller_email"/>
+                            </td>
+
+                            <th>Skrill Email</th>
+                            <td>
+                                <input type="email" class="form-control" value="{{agents_profile.skrill_email}}"
+                                       name="update_skrill_email"/>
+                            </td>
+                        </tr>
+
+
+                        <tr>
+                            <th>Contact No</th>
+                            <td><input type="text" class="form-control" value="{{agents_profile.phone}}"
+                                       name="update_contactno"/></td>
+                            <th>Address</th>
+                            <td><input type="text" class="form-control" value="{{agents_profile.address}}"
+                                       name="update_address"/></td>
+                        </tr>
+                        <tr>
+                            <th>City</th>
+                            <td><input type="text" class="form-control" value="{{agents_profile.city}}"
+                                       name="update_city"/></td>
+                            <th>Country</th>
+                            <td><input type="text" class="form-control" value="{{agents_profile.country}}"
+                                       name="update_country"/></td>
+                        </tr>
+                        <tr>
+                            <th>Telegram</th>
+                            <td><input type="text" class="form-control" value="{{agents_profile.telegram}}"
+                                       name="update_telegram"/></td>
+                            <th>Facebook</th>
+                            <td><input type="text" class="form-control" value="{{agents_profile.facebook}}"
+                                       name="update_facebook"/></td>
+                        </tr>
+
+                        <tr>
+                            <th>Skype</th>
+                            <td><input class="form-control" type="text" value="{{agents_profile.skype}}"
+                                       name="update_skype"/></td>
+
+                            <th>Change Password</th>
+                            <td><input class="form-control" type="text" value="{{agents_profile.password}}"
+                                       name="update_newpass"/></td>
+                        </tr>
+
+                        </tbody>
+
+
+                    </table>
+
+
+                    <button class="btn btn-primary pull-right" style="margin: 0px 0px 10px 10px">Save Update
+
+                    </button>
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+{% endblock %}

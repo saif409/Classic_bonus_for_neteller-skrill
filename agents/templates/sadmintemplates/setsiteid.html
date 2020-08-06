@@ -1,0 +1,67 @@
+{% extends "sadmintemplates/header.html" %}
+{% block content %}
+<center>
+    <div class="container">
+        <div class="row" style="margin:50px;">
+
+            <div class="col-md-4">
+
+
+                <div class="card">
+                    <h5>Current Site Ids for {{theagent}}</h5>
+
+                    <ul class="list-group list-group-flush">
+                        {% for siteid in thesiteids %}
+                        <li class="list-group-item"> <span class="badge badge-pill badge-primary">{{forloop.counter}}.</span>
+                             {{siteid}}  <span class="badge badge-pill badge-success">{{siteid.idsource}}</span></li>
+
+                        {% endfor %}
+                    </ul>
+                </div>
+
+
+            </div>
+
+            <div class="col-md-1">
+            </div>
+
+
+            <div class="col-md-7">
+
+
+                <form action="{% url 'set-siteid' agent=theagent %}" method="post">
+                    {% csrf_token %}
+                    <h2>Adding site id to agent, '{{theagent}}'</h2>
+                    <div class="form-group">
+                        <label for="exampleInputPassword1"></label>
+                        <input type="number" name="siteid" class="form-control" id="exampleInputPassword1"
+                               placeholder="Type a site id..">
+                    </div>
+                    <div class="form-group">
+                        <select name="siteidtype" class="form-control">
+                            <option value="neteller">Neteller ID</option>
+                            <option value="skrill">Skrill ID</option>
+                        </select>
+
+                    </div>
+
+
+                    <button type="submit" class="form-control btn btn-primary">Add</button>
+                </form>
+
+                <br/>
+                <H2 style="color: red">{{siteidaddingmessage}}</H2>
+
+                <br/>
+
+
+            </div>
+
+
+        </div>
+    </div>
+
+
+</center>
+
+{% endblock %}

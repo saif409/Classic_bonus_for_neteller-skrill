@@ -1,0 +1,125 @@
+{% extends "sadmintemplates/header.html" %}
+{% block content %}
+
+<div class="container-fluid">
+    <div class="row" style="margin:50px;">
+
+        <div class="col-md-4">
+
+
+            <form action="{% url 'agent-commission' %}" method="post">
+                {% csrf_token %}
+                <h2>Adding Direct Commission Rules for Agents</h2>
+                <div class="form-group">
+                    <label for="exampleInputPassword1"></label>
+                    <input type="number" name="admin_commissionamount" required class="form-control"
+                           id="exampleInputPassword2" min="0" max="99.99" step="0.01"
+                           placeholder="Enter Admin Commission Amount for $1000">
+
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputPassword1"></label>
+                    <input type="number" name="commissionamount" required class="form-control"
+                           id="exampleInputPassword1" min="0" max="99.99" step="0.01"
+                           placeholder="Enter Agent Commission Amount for $1000">
+
+                </div>
+                <div class="form-check">
+                    <input type="checkbox" name="applyrules" class="form-check-input" id="exampleCheck1">
+                    <label class="form-check-label" for="exampleCheck1">Apply to All 100% Agents</label>
+                    <p><small>Checking this button will remove all custom Agent Commission rules.</small></p>
+                </div>
+
+                <div class="form-group">
+                    <br/>
+                    <label class="form-check-label" for="activationdate">Payment Rule Activation Date:</label>
+                    <p><small>This will have impact of Agent total balance.</small></p>
+                    <input type="date" id="activationdate" class="form-control" required name="activationdate">
+                </div>
+
+                <br />
+
+                <button type="submit" class="form-control btn btn-primary">Add Rule & Apply</button>
+            </form>
+
+            <br/>
+            <H2 style="color: red">{% if comissionrulemessage %} {{comissionrulemessage}} {% endif %}</H2>
+
+            <br/>
+
+
+        </div>
+
+        <div class="col-md-2">
+        </div>
+
+        <div class="col-md-6">
+
+            <div class="card" style="margin-bottom: 60px;">
+                <h2>Current Commission Rule</h2>
+
+
+               <div class="table-responsive">
+                    <table class="table table-striped">
+                    <tr>
+                        <th scope="col">Commission Amount per 1000$</th>
+                        <th scope="col">Applied to</th>
+                        <th scope="col">Updated By</th>
+                        <th scope="col">Date Added</th>
+                    </tr>
+
+                    <tr>
+                        <td>{{lastest.commission}}$ <span class="badge badge-success">Active</span>
+                        <br/><br/>
+                        <span class="btn btn-sm btn-outline-dark">Admin Amount: ${{lastest.adminCommissionIn1K}}</span>
+                        </td>
+                        <td>{{lastest.applyrules}}</td>
+                        <td>{{lastest.username}}</td>
+                        <td>{{lastest.updated}}</td>
+
+                    </tr>
+                </table>
+               </div>
+
+
+            </div>
+            <div class="card">
+                <h2>All Previous Commission Rules</h2>
+
+
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Commission Amount</th>
+                        <th scope="col">Admin Amount</th>
+                        <th scope="col">Applied to</th>
+                        <th scope="col">Updated By</th>
+                        <th scope="col">Date Added</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for item in alldata %}
+                    <tr>
+                        <td>{{forloop.counter}}</td>
+                        <td>${{item.commission}}</td>
+                        <td>${{item.adminCommissionIn1K}}</td>
+                        <td>{{item.applyrules}}</td>
+                        <td>{{item.username}}</td>
+                        <td>{{item.updated}}</td>
+
+                    </tr>
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+                </div>
+
+
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

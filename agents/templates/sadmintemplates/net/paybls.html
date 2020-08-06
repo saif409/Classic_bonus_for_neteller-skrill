@@ -1,0 +1,119 @@
+{% extends "sadmintemplates/header.html" %}
+{% block content %}
+
+<br/>
+<!-- Page content -->
+<div class="container-fluid">
+
+    <div class="row">
+
+        <div class="col-md-8">
+            <br/> <br/>
+            <h2>Net Payables to Agents</h2>
+
+            <br/>
+            <h4>Total Lifetime Payables</h4>
+
+            <div class="btn-group btn-sm btn-group-toggle">
+                <a class="btn btn-outline-primary btn-sm"
+                   href=""
+                   style="padding: 5px 25px 5px 25px; font-size: 15px; color: green;">
+                    Neteller <br/>
+                    ${{net_rcv_total}}
+                </a>
+
+                <a class="btn btn-outline-primary btn-sm"
+                   href=""
+                   style="padding: 5px 25px 5px 25px; font-size: 15px; color: purple;">
+                    Skrill <br/>
+                    £{{skr_rcv_total}}
+                </a>
+
+            </div>
+
+            <div class="table-responsive">
+                <table class="table align-items-center table-flush">
+                    <tr>
+                        <th>Month</th>
+                        <th>System</th>
+                        <th>Deposits</th>
+                        <th>Profit</th>
+                    </tr>
+                    {% for nt,sk in bothSNLists %}
+                    <tr>
+
+                        <td>
+                            {{nt.month}} <br/><br/>
+                            {{sk.month}}
+                        </td>
+                        <td>
+                            <span class="btn btn-outline-success btn-sm" style="color: green;">Neteller</span> <br/><br/>
+                            <span class="btn btn-outline-danger btn-sm" style="color: purple;">Skrill</span>
+
+                        </td>
+                        <td>
+                            ${{nt.d}} <br/><br/>
+
+                            £{{sk.d}}
+                        </td>
+                        <td>
+                            ${{nt.c}} <br/><br/>
+
+                            £{{sk.c}}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+
+                <br/>
+
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <br/> <br/><br/> <br/><br/> <br/>
+            <h2>Currently Net Payable</h2>
+
+            <div class="btn-group btn-sm btn-group-toggle">
+                <a class="btn btn-outline-primary btn-sm"
+                   href=""
+                   style="padding: 5px 25px 5px 25px; font-size: 15px; color: green;">
+                    Neteller <br/>
+                    ${{net_cur_bal}}
+                </a>
+
+                <a class="btn btn-outline-primary btn-sm"
+                   href=""
+                   style="padding: 5px 25px 5px 25px; font-size: 15px; color: purple;">
+                    Skrill <br/>
+                    £{{skr_cur_bal}}
+                </a>
+
+            </div>
+            <br/><br/> <br/>
+
+            <h2>Already Paid</h2>
+
+            <div class="btn-group btn-sm btn-group-toggle">
+                <a class="btn btn-outline-primary btn-sm"
+                   href=""
+                   style="padding: 5px 25px 5px 25px; font-size: 15px; color: green;">
+                    Neteller <br/>
+                    ${{net_already_paid}}
+                </a>
+
+                <a class="btn btn-outline-primary btn-sm"
+                   href=""
+                   style="padding: 5px 25px 5px 25px; font-size: 15px; color: purple;">
+                    Skrill <br/>
+                    £{{skr_already_paid}}
+                </a>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

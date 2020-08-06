@@ -1,0 +1,99 @@
+{% extends "sadmintemplates/header.html" %}
+{% block content %}
+
+
+<!-- Address -->
+
+<div class="row container-fluid">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="row align-items-center">
+                    <div class="col-12">
+                        <h2 class="mb-0">All Agents</h2>
+                        <div class="col-lg-offset-6">
+                            <div class="card-header border-0 ">
+                                <a class="btn btn-primary btn-sm float-right"
+                                   href="{% url 'Agents_list' filter='active' %}">
+                                    Active Agents
+                                </a>
+                                <a class="mr-2 btn btn-primary btn-sm float-right"
+                                   href="{% url 'Agents_list' filter='inactive' %}">
+                                    InActive Agents
+                                </a>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table align-items-center table-flush">
+                <thead class="thead-light">
+                <tr>
+                    <th scope="col" class="sort" data-sort="name">Sl no</th>
+                    <th scope="col" class="sort" data-sort="name">Name</th>
+                    <th scope="col" class="sort" data-sort="name">Username</th>
+                    <th scope="col" class="sort" data-sort="name">Status</th>
+                    <th scope="col" class="sort" data-sort="name">Phone/Email</th>
+                    <th scope="col" class="sort" data-sort="budget">Commission</th>
+                    <th scope="col">Action</th>
+                </tr>
+                </thead>
+                {% for a in agents %}
+                <tbody class="list">
+                <tr>
+                    <th scope="row"><span class="name mb-0 text-sm">{{ forloop.counter}}</span></th>
+                    <th scope="row"><span class="name mb-0 text-sm">{{ a.fname }} {{ a.lname }}</span></th>
+                    <td><span class="status">{{ a.username }}</span></td>
+                    <td><span class="status">
+                 {% if a.status == 0 %}
+                    <span class="badge badge-pill badge-danger">InActive</span>
+                 {% else %}
+                    <span class="badge badge-pill badge-success">Active</span>
+                 {% endif %}
+
+
+             </span></td>
+                    <td><span class="status">{{ a.phone }} <br /> {{ a.email }}</span></td>
+                    <td>
+                        {% if a.commissionType == 'All' %}
+                        <span class="status">{{a.commission}}%</span> <br/>
+                        <span class="badge badge-info">Direct Percentage</span>
+                        {% else %}
+                        <span class="status">{{a.RevShareAgent}}%</span><br/>
+                        <span class="badge badge-success">Revenue Share</span>
+
+                        {% endif %}
+                    </td>
+
+                    <td>
+                        <div class="dropdown">
+                            <a class="btn btn-sm btn-icon-only text-light" href="#" role="button"
+                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-ellipsis-v"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                                <a class="dropdown-item" href="{% url 'profile_edit_agent' username=a.username %}">Update
+                                    Agent</a>
+                                <a class="dropdown-item" href="{% url 'set-siteid' agent=a.username %}">Add Site ID</a>
+                                <a class="dropdown-item" href="{% url 'revenueShare' agent=a.username %}">Revenue Share</a>
+
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+
+                </tbody>
+                {% endfor %}
+
+            </table>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

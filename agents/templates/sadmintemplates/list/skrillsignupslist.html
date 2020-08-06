@@ -1,0 +1,91 @@
+{% extends "sadmintemplates/header.html" %}
+{% block content %}
+
+<br/>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <!-- Card header -->
+                <div class="card-header border-0">
+                    <h3 class="mb-0">All Skrill Signups
+
+                       <a class="btn btn-primary btn-sm float-right" href="{% url 'skrill_signup' %}" >
+                            Skrill Signups
+                        </a>
+                       <a class="mr-2 btn btn-neutral btn-sm float-right" href="{% url 'neteller_signup' %}" >
+                            Neteller Signup
+                        </a>
+
+                    </h3>
+
+
+                </div>
+                <!-- Light table -->
+                <div class="table-responsive">
+                    <table class="table align-items-center table-flush">
+                        <thead class="thead-light">
+                        <tr>
+                            <th scope="col" class="sort" data-sort="name">SL No</th>
+                            <th scope="col" class="sort" data-sort="name">Skrill ID</th>
+                            <th scope="col" class="sort" data-sort="budget">Site_ID</th>
+                            <th scope="col" class="sort" data-sort="status">Partner_code</th>
+                            <th scope="col">Date</th>
+                        </tr>
+                        </thead>
+                        <tbody class="list">
+                        {% for skr_signups in skrillsignups %}
+                            <tr>
+                             <th scope="row">
+                                <span class="name mb-0 text-sm">{{ skr_signups.id }}</span>
+                            </th>
+                            <th scope="row">
+                                <span class="name mb-0 text-sm">{{ skr_signups.Skrill_ID }}</span>
+                            </th>
+                            <td class="budget">
+                                {{ skr_signups.Site_ID }}
+                            </td>
+                            <td>
+                                <span class="status">{{ skr_signups.Partner_code }}</span>
+                            </td>
+                            <td>
+                                <span class="status">{{ skr_signups.Date }}</span>
+                            </td>
+
+                        </tr>
+                        {% endfor %}
+
+                        </tbody>
+                    </table>
+                </div>
+
+
+
+                <div class="card-footer py-4">
+                    <nav aria-label="...">
+                          <div class="col-lg-offset-9">
+                                <div class="pagination">
+                                    <span class="step-links">
+                                        {% if skrillsignups.has_previous %}
+                                            <a href="?page=1">&laquo; first || </a>
+                                            <a href="?page={{ skrillsignups.previous_page_number }}">previous</a>
+                                        {% endif %}
+                                        <span class="current">
+                                            Page {{ skrillsignups.number }} of {{ skrillsignups.paginator.num_pages }}.
+                                        </span>
+                                        {% if skrillsignups.has_next %}
+                                            <a href="?page={{ skrillsignups.next_page_number }}">next ||</a>
+                                            <a href="?page={{ skrillsignups.paginator.num_pages }}">last &raquo;</a>
+                                        {% endif %}
+                                    </span>
+                                 </div>
+                           </div>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

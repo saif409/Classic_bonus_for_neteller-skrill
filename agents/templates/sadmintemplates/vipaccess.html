@@ -1,0 +1,198 @@
+{% extends "sadmintemplates/header.html" %}
+{% block content %}
+
+<br/>
+<!-- Page content -->
+<div class="container-fluid">
+    <div class="row">
+
+        <div class="col-xl-12 order-xl-1">
+            <div class="card">
+
+                <div class="card-header">
+                    <div class="row align-items-center">
+                        <div class="col-12">
+
+                            {% if type == 'NETELLER' %}
+                            <h2><a class="btn btn-success" href="{% url 'vip-accesses' type='NETELLER' state='Pending' %}">
+                                {{type}} VIP {{filter}} Applications
+                            </a>
+                            <a class="btn btn-outline-danger" href="{% url 'vip-accesses' type='SKRILL' state='Pending' %}">
+                                SKRILL VIP Pending Applications</a>
+                            </h2>
+                            {% elif type == 'SKRILL' %}
+                             <h2>
+                            <a class="btn btn-outline-success" href="{% url 'vip-accesses' type='NETELLER' state='Pending' %}">
+                                NETELLER VIP Pending Applications</a>
+                                 <a class="btn btn-danger" href="{% url 'vip-accesses' type='SKRILL' state='Pending' %}">
+                                {{type}} VIP {{filter}} Applications
+                            </a>
+                            </h2>
+                            {% endif %}
+
+
+                            {% if type == 'NETELLER' %}
+                            <div class="col-lg-offset-6">
+                                <div class="card-header border-0 ">
+                                    <a class="mr-2 btn btn-primary btn-sm float-right"
+                                       href="{% url 'vip-accesses' type='NETELLER' state='Pending' %}">
+                                        Pending
+                                    </a>
+                                    <a class="mr-2 btn btn-primary btn-sm float-right"
+                                       href="{% url 'vip-accesses' type='NETELLER' state='Approved' %}">
+                                        Approved
+                                    </a>
+
+                                    <a class="mr-2 btn btn-primary btn-sm float-right"
+                                       href="{% url 'vip-accesses' type='NETELLER' state='Rejected' %}">
+                                        Rejected
+                                    </a>
+
+                                </div>
+                            </div>
+                            {% endif %}
+
+
+                            {% if type == 'SKRILL' %}
+                            <div class="col-lg-offset-6">
+                                <div class="card-header border-0 ">
+                                    <a class="mr-2 btn btn-primary btn-sm float-right"
+                                       href="{% url 'vip-accesses' type='SKRILL' state='Pending' %}">
+                                        Pending
+                                    </a>
+                                    <a class="mr-2 btn btn-primary btn-sm float-right"
+                                       href="{% url 'vip-accesses' type='SKRILL' state='Approved' %}">
+                                        Approved
+                                    </a>
+
+                                    <a class="mr-2 btn btn-primary btn-sm float-right"
+                                       href="{% url 'vip-accesses' type='SKRILL' state='Rejected' %}">
+                                        Rejected
+                                    </a>
+
+                                </div>
+                            </div>
+                            {% endif %}
+
+
+                        </div>
+                    </div>
+                </div>
+
+                {% if type == 'NETELLER' %}
+                <div class="card-body">
+
+                    <button class="btn btn-outline-dark float-right">Download {{type}} Data</button>
+
+                    <!-- Address -->
+                    <div class="table-responsive">
+                        <table class="table align-items-center table-flush">
+                            <thead class="thead-light">
+                            <tr>
+                                <th scope="col" class="sort" data-sort="name">Sl NO</th>
+                                <th scope="col" class="sort" data-sort="name">Account ID</th>
+                                <th scope="col" class="sort" data-sort="status"> Site Id</th>
+                                <th scope="col" class="sort" data-sort="status">Access Status</th>
+
+                            </tr>
+                            </thead>
+
+
+                            <tbody>
+
+                            {% for vasd in vipaccessdata %}
+                            <tr>
+                                <th scope="row"><span class="name mb-0 text-sm">{{forloop.counter}}</span></th>
+                                <th scope="row"><span class="name mb-0 text-sm">{{vasd.Neteller_ID}}</span></th>
+                                <td class="budget">{{vasd.Site_ID}}</td>
+                                <td>
+
+                                    {% if vasd.VipStatus == 1 %}
+                                    <button class="btn btn-sm btn-outline-danger">Request Pending</button>
+                                    {% elif vasd.VipStatus == 2 %}
+                                    <button class="btn btn-sm btn-success">Request Accepted</button>
+                                    {% elif vasd.VipStatus == 3 %}
+                                    <button class="btn btn-sm btn-outline-dark">Request Rejected</button>
+                                    {% endif %}
+
+                                </td>
+
+                            </tr>
+
+                            {% endfor %}
+
+
+                            </tbody>
+
+
+                        </table>
+
+
+                    </div>
+
+
+                </div>
+                {% endif %}
+
+                {% if type == 'SKRILL' %}
+                <div class="card-body">
+
+                    <button class="btn btn-outline-dark float-right">Download {{type}} Data</button>
+
+                    <!-- Address -->
+                    <div class="table-responsive">
+                        <table class="table align-items-center table-flush">
+                            <thead class="thead-light">
+                            <tr>
+                                <th scope="col" class="sort" data-sort="name">Sl NO</th>
+                                <th scope="col" class="sort" data-sort="name">Account ID</th>
+                                <th scope="col" class="sort" data-sort="status"> Site Id</th>
+                                <th scope="col" class="sort" data-sort="status">Access Status</th>
+
+                            </tr>
+                            </thead>
+
+
+                            <tbody>
+
+                            {% for vasd in vipaccessdata %}
+                            <tr>
+                                <th scope="row"><span class="name mb-0 text-sm">{{forloop.counter}}</span></th>
+                                <th scope="row"><span class="name mb-0 text-sm">{{vasd.Skrill_ID}}</span></th>
+                                <td class="budget">{{vasd.Site_ID}}</td>
+                                <td>
+
+                                    {% if vasd.VipStatus == 1 %}
+                                    <button class="btn btn-sm btn-outline-danger">Request Pending</button>
+                                    {% elif vasd.VipStatus == 2 %}
+                                    <button class="btn btn-sm btn-success">Request Accepted</button>
+                                    {% elif vasd.VipStatus == 3 %}
+                                    <button class="btn btn-sm btn-outline-dark">Request Rejected</button>
+                                    {% endif %}
+
+                                </td>
+
+                            </tr>
+
+                            {% endfor %}
+
+
+                            </tbody>
+
+
+                        </table>
+
+
+                    </div>
+
+
+                </div>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,112 @@
+{% extends "sadmintemplates/header.html" %}
+{% block content %}
+{% load static %}
+
+<div class="row container-fluid">
+    <div class="col-md-12">
+
+
+        <div class="card">
+
+            <div class="card-body">
+
+
+                <br/>
+                <H3 style="padding-left: 20px;">Editing Account : {{singleUser.username}} </H3>
+
+                {% if userupdateresponse %}
+                <div class="alert alert-primary" role="alert" style="margin: 20px 0px 20px 0px;">
+                    <H3 style="color: white;">{{userupdateresponse}}</H3>
+                </div>
+                {% endif %}
+
+
+                <form action="{% url 'profile_edit_agent' username=singleUser.username %}" method="post">
+                    {% csrf_token %}
+                    <table class="table table-bordered">
+                        <tbody>
+                        <tr>
+                            <th>First Name</th>
+                            <td><input type="text" class="form-control" value="{{singleUser.fname}}"
+                                       name="update_firstname"/></td>
+                        </tr>
+                        <tr>
+                            <th>Last Name</th>
+                            <td><input type="text" class="form-control" value="{{singleUser.lname}}"
+                                       name="update_lastname"/></td>
+                        </tr>
+
+                        <tr>
+                            <th>User Name</th>
+                            <td><input disabled class="form-control" type="text" value="{{singleUser.username}}"
+                                       name="update_username"/>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th>Email</th>
+                            <td><input type="text" class="form-control" value="{{singleUser.email}}"
+                                       name="update_email"/></td>
+                        </tr>
+
+
+                        <tr>
+                            <th>Account Status</th>
+                            <td> Current Status: {% if singleUser.status == 0 %}
+                                <span class="badge badge-pill badge-danger">InActive</span>
+                                {% else %}
+                                <span class="badge badge-pill badge-success">Active</span>
+                                {% endif %}
+                                <br/> <br/>
+
+                                <select name="update_status" class="form-control">
+                                    <option value="{{singleUser.status}}">
+
+
+                                        {% if singleUser.status == 0 %} InActive
+                                        {% else %} Active
+                                        {% endif %}
+
+
+                                    </option>
+                                    <option value="0">Inactive</option>
+                                    <option value="1">Active</option>
+                                </select>
+
+                            </td>
+                        </tr>
+
+
+                        <tr>
+                            <th>Contact No</th>
+                            <td><input type="text" class="form-control" value="{{singleUser.phone}}"
+                                       name="update_contactno"/></td>
+                        </tr>
+
+
+                        <tr>
+                            <th>Change Password</th>
+                            <td><input class="form-control" type="text" value="{{singleUser.password}}"
+                                       name="update_newpass"/></td>
+                        </tr>
+
+
+                        </tbody>
+
+
+                    </table>
+
+
+                    <button class="btn btn-primary pull-right" style="margin: 0px 0px 10px 10px">Save Update
+
+                    </button>
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+{% endblock %}

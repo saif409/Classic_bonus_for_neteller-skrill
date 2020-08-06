@@ -1,0 +1,62 @@
+{% extends "agenttemplates/agents_header.html" %}
+{% block content %}
+
+
+                <!-- Address -->
+                <br><h2 class=" btn btn-success" style="color:#fff;">Agents List</h2><br>
+                  <div class="table-responsive">
+                    <table class="table align-items-center table-flush">
+                        <thead class="thead-light">
+                        <tr>
+                            <th scope="col" class="sort" data-sort="name">Sl no</th>
+                            <th scope="col" class="sort" data-sort="name">Username</th>
+                            <th scope="col" class="sort" data-sort="name">Country</th>
+                            <th scope="col" class="sort" data-sort="budget">Email</th>
+                            <th scope="col" class="sort" data-sort="status">Phone</th>
+                            <th scope="col" class="sort" data-sort="status">Assign site id</th>
+                            <th scope="col" class="sort" data-sort="status">Adress</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                        </thead>
+                        {% for a in author %}
+                            <tbody class="list">
+
+                            <th scope="row"><span class="name mb-0 text-sm">{{ forloop.counter}}</span></th>
+                            <th scope="row"><span class="name mb-0 text-sm">{{ a.name.username }}</span></th>
+                            <td class="budget">{{ a.country }}</td>
+                            <td><span class="status">{{ a.name.email }}</span></td>
+                            <td><span class="status">{{ a.phone }}</span></td>
+                            <td><span class="status">{{ a.Assign_site_id }}</span></td>
+                            <td><span class="status">{{ a.address }}</span></td>
+                            <td>
+                                <div class="dropdown">
+                                    <a class="btn btn-sm btn-icon-only text-light" href="#" role="button"
+                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                                        <a class="dropdown-item" href="{% url 'agentsprofile' id=a.id %}">View Agent</a>
+                                        <a class="dropdown-item" href="#">Edit Agent</a>
+                                        <a class="dropdown-item" href="#">Block Agent</a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+
+                        </tbody>
+                        {% endfor %}
+
+                    </table>
+                </div>
+
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+
+{% endblock %}

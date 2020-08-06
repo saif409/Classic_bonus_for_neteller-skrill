@@ -1,0 +1,66 @@
+{% extends "agenttemplates/agents_header.html" %}
+{% block content %}
+
+{% load static %}
+
+<div class="row container">
+    <div class="col-md-1"></div>
+    <div class="col-md-9">
+
+        <div class="card">
+
+
+            <div class="card-body">
+
+
+                <br/>
+                <H2>Invite an agent</H2>
+                <br/>
+
+
+                <form action="{% url 'profile' %}" method="post">
+                    {% csrf_token %}
+                    <table class="table table-bordered">
+                        <tbody>
+                        <tr>
+                            <td><input type="text" class="form-control" placeholder="Name of the Agent"
+                                       name="invite_nameofagent"/></td>
+
+                            <td><input type="email" class="form-control" value="Email of Agent"
+                                       name="invite_emailofagent"/></td>
+                        </tr>
+
+
+                        <tr>
+                            <td><input class="form-control" type="text" placeholder="Enter Partner Code"
+                                       name="invite_partnercode"/>
+                            </td>
+
+                            <td><input type="text" class="form-control" placeholder="Phone Number of Agent"
+                                       name="invite_phonenumber"/></td>
+                        </tr>
+
+
+                        </tbody>
+
+
+                    </table>
+
+                    <button class="btn btn-primary pull-right" style="margin: 10px 0px 10px 25px">Send Request
+                    </button>
+                    <br/><br/>
+                    <small>Note: A copy of this request will go to the Agent Email and Admin.</small>
+
+
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+    <div class="col-md-2"></div>
+
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,139 @@
+{% extends "agenttemplates/agents_header.html" %}
+{% block content %}
+
+<!-- Page content -->
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8">
+
+            <table class="table table-striped" style="margin-top: 50px;">
+                <tr>
+                    <th>System</th>
+                    <th>Deposits</th>
+                    <th>Requests</th>
+                    <th>Status</th>
+                    <th>Date Created</th>
+                    <th>Due Date</th>
+                </tr>
+                {% for item in payment_history %}
+                <tr>
+                    <td>
+                        {% if item.paymentPlatform == "Neteller" %}
+                        <span class="btn btn-sm btn-outline-success">Neteller</span>
+                        {% else %}
+                        <span class="btn btn-sm btn-outline-danger">Skrill</span>
+                        {% endif %}
+                    <td>{{item.amount}}</td>
+                    <td>{{item.paymentEmail}}</td>
+                    <td>
+
+                        {% if item.status == 1 %}
+                        <span class="btn btn-sm btn-outline-danger">Pending</span>
+                        {% elif item.status == 2 %}
+                        <span class="btn btn-sm btn-outline-success">Paid</span>
+                        {% elif item.status == 3 %}
+                        <span class="btn btn-sm btn-outline-dark">Declined</span>
+                        {% endif %}
+
+                    </td>
+                    <td>{{item.datecreation}}</td>
+                    <td>{{item.duedate}}</td>
+                </tr>
+                {% endfor %}
+
+            </table>
+
+        </div>
+        <div class="col-md-4">
+
+            <div class="card">
+
+                <H2 style="text-align: center; margin-top: 50px;">Order Payment</H2>
+
+                <div class="card-body" style="">
+
+                    <div style="margin: 0px 20px 20px 20px; text-align: center">
+                        <H2 style="color: green; font-size: 30px;">NETELLER</H2>
+                        <button class="btn btn-outline-success" data-toggle="modal" data-target="#netellerpayoutform">
+                            Payout
+                        </button>
+                    </div>
+                    <div style="margin: 0px 20px 20px 20px; text-align: center">
+                        <H2 style="color: purple; font-size: 30px;">SKRILL</H2>
+                        <button class="btn btn-outline-danger">Payout</button>
+                    </div>
+
+                </div>
+
+                {% if nettellerpaymentreq_response %}
+                <div class="alert alert-primary" role="alert">
+                    <H3 style="color: white;">{{nettellerpaymentreq_response}}</H3>
+                </div>
+                {% endif %}
+
+            </div>
+            <div class="card">
+
+                <H2 style="text-align: center; margin-top: 20px;">Balance</H2>
+
+                <div class="card-body" style="display: flex; margin: auto;">
+
+                    <button type="button" class="btn btn-outline-success" style="padding: 10px;">
+                        <H2> USD: {{agent_net_bal}}</H2>
+                    </button>
+                    <button type="button" class="btn btn-outline-danger" style="padding: 10px;">
+                        <H2> EUR: {{agent_skr_bal}}</H2>
+                    </button>
+
+                </div>
+
+
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="netellerpayoutform" tabindex="-1" role="dialog" aria-labelledby="netellerpayoutform"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Withdrawal</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <form method="post">
+                {% csrf_token %}
+
+                <div class="modal-body">
+                    <p class="text-success">Neteller Account</p>
+                    <input type="text" readonly class="form-control" name="agentz_net_email"
+                           value="{{agent_net_email}}"/>
+                    <br/>
+                    <p class="text-success">Your Balance: (USD)</p>
+                    <input type="text" readonly class="form-control" value="{{agent_net_bal}}"/>
+
+                    <br/><br/>
+                    <p class="text-success">Withdrawal: (USD)</p>
+                    <input type="number" required name="neteller_with_amount" class="form-control"
+                           max="{{agent_net_bal}}" placeholder="{{agent_net_bal}}"/>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Withdraw Funds</button>
+                </div>
+
+            </form>
+
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

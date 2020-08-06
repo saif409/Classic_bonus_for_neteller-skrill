@@ -1,0 +1,86 @@
+{% extends "sadmintemplates/header.html" %}
+{% block content %}
+
+<br/>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <!-- Card header -->
+                <div class="card-header border-0">
+                    <h3 class="mb-0">All Skrill Deposit
+
+                       <a class="btn btn-primary btn-sm float-right" href="{% url 'skrill_deposits' %}">
+                            Skrill Deposits
+                        </a>
+                        <a class="mr-2 btn btn-neutral btn-sm float-right" href="{% url 'neteller_deposits' %}">
+                            Neteller Deposits
+                        </a>
+
+                    </h3>
+
+
+                </div>
+                <!-- Light table -->
+                <div class="table-responsive">
+                    <table class="table align-items-center table-flush">
+                        <thead class="thead-light">
+                        <tr>
+                            <th>Sl NO</th>
+                            <th>Skrill ID</th>
+                            <th>Site ID</th>
+                            <th>Partner Code</th>
+                            <th>Profit</th>
+                            <th>Date</th>
+                        </tr>
+                        </thead>
+                        <tbody class="list">
+                        {% for skrdeps in skrdeposits %}
+                        <tr>
+                            <td> {{skrdeps.id}} </td>
+                            <td>{{ skrdeps.Skrill_ID }}</td>
+                            <td>{{ skrdeps.Site_ID }}</td>
+                            <td>{{ skrdeps.Deposite }}</td>
+                            <td>{{ skrdeps.Profit }}</td>
+                            <td>{{ skrdeps.Date }}</td>
+
+                        </tr>
+                        {% endfor %}
+
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Card footer -->
+
+                <div class="card-footer py-4">
+                    <nav aria-label="...">
+                          <div class="col-lg-offset-9">
+                                <div class="pagination">
+                                    <span class="step-links">
+                                        {% if skrdeposits.has_previous %}
+                                            <a href="?page=1">&laquo; first || </a>
+                                            <a href="?page={{ skrdeposits.previous_page_number }}">previous</a>
+                                        {% endif %}
+                                        <span class="current">
+                                            Page {{ skrdeposits.number }} of {{ skrdeposits.paginator.num_pages }}.
+                                        </span>
+                                        {% if skrdeposits.has_next %}
+                                            <a href="?page={{ skrdeposits.next_page_number }}">next ||</a>
+                                            <a href="?page={{ skrdeposits.paginator.num_pages }}">last &raquo;</a>
+                                        {% endif %}
+                                    </span>
+                                 </div>
+                           </div>
+                    </nav>
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

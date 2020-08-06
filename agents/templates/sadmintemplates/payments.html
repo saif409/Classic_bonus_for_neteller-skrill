@@ -1,0 +1,186 @@
+{% extends "sadmintemplates/header.html" %}
+{% block content %}
+
+<br/>
+<!-- Page content -->
+<div class="container-fluid">
+    <div class="row">
+
+        <div class="col-xl-12 order-xl-1">
+            <div class="card">
+
+                <div class="card-header">
+                    <div class="row align-items-center">
+                        <div class="col-12">
+                            <h2 class="mb-0">Requested Payments</h2>
+
+                {% if makePaymentReq %}
+                <div class="alert alert-primary" role="alert" style="margin: 20px 0px 20px 0px;">
+                    <H3 style="color: white;">{{makePaymentReq}}</H3>
+                </div>
+                {% endif %}
+
+                            <div class="col-lg-offset-6">
+                                <div class="card-header border-0 ">
+                                    <a class="btn btn-primary btn-sm float-right"
+                                       href="{% url 'payments' status='paid' %}">
+                                        Already Paid
+                                    </a>
+                                    <a class="mr-2 btn btn-primary btn-sm float-right"
+                                       href="{% url 'payments' status='upcoming' %}">
+                                        Upcoming
+                                    </a>
+                                    <a class="mr-2 btn btn-primary btn-sm float-right"
+                                       href="{% url 'payments' status='declined' %}">
+                                        Declined
+                                    </a>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="card-body">
+
+
+                    <!-- Address -->
+                    <div class="table-responsive">
+                        <table class="table align-items-center table-flush">
+                            <thead class="thead-light">
+                            <tr>
+                                <th>Sl NO</th>
+                                <th>Agent Name</th>
+                                <th>Platform</th>
+                                <th>Payment Email</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th>Date Creattion</th>
+                                <th>Due Date</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+
+
+                            <tbody>
+                            {% for allp in allpayments %}
+
+                            <tr>
+                                <td>{{forloop.counter}}</td>
+                                <td>{{allp.agent}}</td>
+                                <td><span class="btn btn-sm btn-outline-success">{{allp.platform}}</span></td>
+                                <td>{{allp.paymentEmail}}</td>
+                                <td><span class="btn btn-sm btn-outline-primary">${{allp.amount}}</span></td>
+                                <td>
+                                    {% if allp.status == 1 %}
+                                    <span class="btn btn-sm btn-outline-danger">Pending</span>
+                                    {% elif allp.status == 2 %}
+                                    <span class="btn btn-sm btn-outline-success">Paid</span>
+                                    {% elif allp.status == 3 %}
+                                    <span class="btn btn-sm btn-outline-dark">Declined</span>
+                                    {% endif %}
+
+                                </td>
+
+                                <td>{{allp.datecreation}}</td>
+                                <td>{{allp.duedate}}</td>
+
+                                <td>
+                                    <div class="dropdown">
+                                        <a class="btn btn-sm btn-icon-only text-light" href="#" role="button"
+                                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="fas fa-ellipsis-v"></i>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                                            <a class="dropdown-item" href="#" data-toggle="modal"
+                                               data-target="#makepayment">Make Payment</a>
+                                            <a class="dropdown-item" href="#">Decline Payment</a>
+                                        </div>
+                                    </div>
+
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="makepayment" tabindex="-1" role="dialog"
+                                         aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Confirm Payment</h5>
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                            aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <form method="post">
+                                                    {% csrf_token %}
+                                                    <div class="modal-body">
+                                                        <p>Platform: <b>{{allp.platform}}</b> | Platform Email:
+                                                            <b>{{allp.paymentEmail}}</b></p>
+                                                        <H4>Agent: {{allp.agent}} <span
+                                                                class="badge badge-success"> ✓</span></H4>
+                                                        <br/>
+                                                        <span class="btn btn-outline-success">Amount: {{allp.amount}} USD</span>
+                                                        <br/><br/>
+                                                        <input type="text" required name="paymentdetails"
+                                                               class="form-control"
+                                                               placeholder="Payment Details.. eg: Invoice No, Payment ID">
+
+                                                        <input type="hidden" name="paymentid" value="{{allp.id}}">
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary"
+                                                                data-dismiss="modal">Close
+                                                        </button>
+                                                        <button type="submit" class="btn btn-primary">Make Payment
+                                                        </button>
+                                                    </div>
+                                                </form>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </td>
+                            </tr>
+
+
+                            {% endfor %}
+
+                            </tbody>
+
+
+                        </table>
+
+                        <div class="card-footer py-4">
+                            <nav aria-label="...">
+                                <div class="col-lg-offset-9">
+                                    <div class="pagination">
+                                    <span class="step-links">
+                                        {% if post.has_previous %}
+                                            <a href="?page=1">&laquo; first || </a>
+                                            <a href="?page={{ post.previous_page_number }}">previous</a>
+                                        {% endif %}
+                                        <span class="current">
+                                            Page ({{ post.number }}) of {{ post.paginator.num_pages }}.
+                                        </span>
+                                        {% if post.has_next %}
+                                            <a href="?page={{ post.next_page_number }}">next ||</a>
+                                            <a href="?page={{ post.paginator.num_pages }}">last &raquo;</a>
+                                        {% endif %}
+                                    </span>
+                                    </div>
+                                </div>
+                            </nav>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

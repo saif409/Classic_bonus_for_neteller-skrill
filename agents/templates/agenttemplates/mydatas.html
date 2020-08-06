@@ -1,0 +1,72 @@
+{% extends "agenttemplates/agents_header.html" %}
+{% block content %}
+
+
+<!-- Address -->
+
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header">
+            <h2>My Data</h2>
+        </div>
+
+        <div class="card-body">
+
+
+            <div class="table-responsive">
+                <table class="table align-items-center table-flush">
+                    <tr>
+                        <th>Month</th>
+                        <th>System</th>
+                        <th>Deposits</th>
+                        <th>Profit</th>
+                        <th>Report</th>
+                    </tr>
+                    {% for nt,sk in bothSNLists %}
+
+                    <tr>
+
+                        <td>
+                            {{nt.month}} <br/><br/>
+                            {{sk.month}}
+
+                        </td>
+                        <td>
+                            <span class="btn btn-outline-success btn-sm" style="color: green;">Neteller</span> <br/><br/>
+                            <span class="btn btn-outline-danger btn-sm" style="color: purple;">Skrill</span>
+
+
+                        </td>
+                        <td>
+                            ${{nt.d}} <br/><br/>
+                            £{{sk.d}}
+
+                        </td>
+                        <td>
+                            ${{nt.c}} <br/><br/>
+                            £{{sk.c}}
+
+                        </td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-success"><i class="fa fa-download"></i>
+                            </button><br/><br/>
+
+                            <button class="btn btn-sm btn-outline-danger"><i class="fa fa-download"></i>
+                            </button>
+
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+
+                <br/>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+
+{% endblock %}

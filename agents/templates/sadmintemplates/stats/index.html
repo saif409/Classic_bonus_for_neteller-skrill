@@ -1,0 +1,522 @@
+{% extends "sadmintemplates/header.html" %}
+{% block content %}
+{% load mathfilters %}
+
+<div class="container-fluid">
+
+    <div class="card">
+        <div class="card-body">
+
+            <div class="btn-group btn-group-toggle">
+                <a class="btn btn-outline-primary"
+                   href="{% url 'adminstats' page='neteller' subpage='deposits' %}"
+                   style="padding: 15px 75px 15px 75px; font-size: 15px; color: green; {{netellerbuttionactive}} ">
+                    Neteller
+                </a>
+
+                <a class="btn btn-outline-primary"
+                   href="{% url 'adminstats' page='skrill' subpage='deposits' %}"
+                   style="padding: 15px 75px 15px 75px; font-size: 15px; color: purple; {{skrillbuttionactive}}">
+                    Skrill
+                </a>
+
+            </div>
+
+            <br/><br/>
+
+            {% if page_is == "neteller" and subpage_is == "deposits" %}
+            <div class="btn-group btn-group-toggle">
+                <a class="btn btn-outline-primary active"
+                   href="{% url 'adminstats' page='neteller' subpage='deposits' %}"
+                   style="padding: 5px 15px 5px 15px; font-size: 11px; ">
+                    Deposits
+                </a>
+                <a class="btn btn-outline-primary"
+                   href="{% url 'adminstats' page='neteller' subpage='applications' %}"
+                   style="padding: 5px 15px 5px 15px; font-size: 11px; ">
+                    Applications
+                </a>
+                <a class="btn btn-outline-primary"
+                   href="{% url 'adminstats' page='neteller' subpage='registrations' %}"
+                   style="padding: 5px 15px 5px 15px; font-size: 11px; ">
+                    Registrations
+                </a>
+
+
+            </div>
+            <br/>
+            <div class="table-responsive" style="margin-top: 30px">
+
+                <div class="card" style="margin-bottom: 70px;">
+                    <div class="card-body">
+                        <H2>Search By</H2>
+                        <form method="post">
+                            {%csrf_token%}
+                            <div class="row">
+                                <div class="col-md-3"></div>
+                                <div class="col-md-3">
+                                    <p>Neteller ID</p>
+                                    <input type="number" class="form-control" name="sb_net_netellerid"
+                                           placeholder="Enter Id">
+                                    <br/><br/>
+                                    <p>Date From</p>
+                                    <input type="date" class="form-control" name="sb_net_datefrom" required>
+                                </div>
+                                <div class="col-md-3">
+                                    <p>Group By</p>
+                                    <input type="checkbox" class="form-check-input" name="sb_net_groupby"> Neteller ID
+                                    <br/><br/><br/><br/>
+                                    <p>Date To</p>
+                                    <input type="date" class="form-control" name="sb_net_dateto" required>
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="checkbox" class="form-check-input" name="sb_siteidgroupby">Group By
+                                    Site ID
+                                    <br/> <br/>
+                                    <p>Enter Side ID</p>
+                                    <input type="number" class="form-control" name="sb_net_siteid">
+                                    <br/><br/>
+                                    <input type="hidden" name="netteller_filtering" value="neteller_filtered">
+                                    <input type="submit" value="Search" class="btn btn-primary">
+                                </div>
+                            </div>
+                        </form>
+
+
+                    </div>
+                </div>
+
+                <H3 style="color: green;">Total deposits found by requests: {{neteller_counts}}</H3>
+                <H3 style="color: green;">Total earnings found by requests: ${{neteller_earnings}}</H3>
+                <br/>
+
+                {% if netellerID_groupBy %}
+                <div class="table-reponsive">
+                    <table class="table table-stripped">
+                        <thead>
+                        <tr style="font-weight: bold">
+                            <td>Neteller ID</td>
+                            <td>Total Deposits</td>
+                            <td>Deposit Counts</td>
+                            <td>Total Profit</td>
+
+                        </tr>
+                        </thead>
+
+                        {% for netgb in neteller_deposits %}
+                        <tr>
+                            <td>
+                                <button name="gb_net_netid"  class="btn btn-link btn-sm" value="">{{netgb.Neteller_ID}}</button>
+                            </td>
+                            <td>{{netgb.Deposite}}</td>
+                            <td>{{netgb.DepositeCounts}}</td>
+                            <td>{{netgb.FinalCommssion}}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+                {% elif siteID_groupBy %}
+
+                <div class="table-reponsive">
+                    <table class="table table-stripped">
+                        <thead>
+                        <tr style="font-weight: bold">
+                            <td>Site ID</td>
+                            <td>Total Deposits</td>
+                            <td>Total Profit</td>
+                        </tr>
+                        </thead>
+
+                        {% for sitegb in neteller_deposits %}
+                        <tr>
+                            <td>{{sitegb.Site_ID}}</td>
+                            <td>${{sitegb.Deposite}}</td>
+                            <td>${{sitegb.FinalCommssion}}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+
+                {% else %}
+
+                <div class="table-responsive">
+                    <table class="table table-stripped">
+                        <tr style="font-weight: bold">
+                            <td>Neteller ID</td>
+                            <td>Site ID</td>
+                            <td>Deposits</td>
+                            <td>Profit</td>
+                            <td>Date</td>
+
+                        </tr>
+                        {% for deposit in neteller_deposits %}
+                        <tr>
+                            <td>{{deposit.Neteller_ID}}</td>
+                            <td>{{ deposit.Site_ID }}</td>
+                            <td> ${{ deposit.Deposite }}</td>
+                            <td> ${{deposit.FinalCommssion}}</td>
+                            <td>{{ deposit.Date }}</td>
+
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+
+                {% endif %}
+
+                <div class="card-footer py-4">
+                    <nav aria-label="...">
+                        <div class="col-lg-offset-9">
+                            <div class="pagination">
+                                    <span class="step-links">
+                                        {% if neteller_deposits.has_previous %}
+                                            <a href="?page=1">&laquo; first || </a>
+                                            <a href="?page={{ neteller_deposits.previous_page_number }}">previous</a>
+                                        {% endif %}
+                                        <span class="current">
+                                            Page {{ neteller_deposits.number }} of {{ neteller_deposits.paginator.num_pages }}.
+                                        </span>
+                                        {% if neteller_deposits.has_next %}
+                                            <a href="?page={{ neteller_deposits.next_page_number }}">next ||</a>
+                                            <a href="?page={{ neteller_deposits.paginator.num_pages }}">last &raquo;</a>
+                                        {% endif %}
+                                    </span>
+                            </div>
+                        </div>
+                    </nav>
+                </div>
+
+            </div>
+            {% endif %}
+
+
+            {% if page_is == "neteller" and subpage_is == "applications" %}
+            <div class="btn-group btn-group-toggle">
+                <a class="btn btn-outline-primary"
+                   href="{% url 'adminstats' page='neteller' subpage='deposits' %}"
+                   style="padding: 5px 15px 5px 15px; font-size: 11px; ">
+                    Deposits
+                </a>
+                <a class="btn btn-outline-primary active"
+                   href="{% url 'adminstats' page='neteller' subpage='applications' %}"
+                   style="padding: 5px 15px 5px 15px; font-size: 11px; ">
+                    Applications
+                </a>
+                <a class="btn btn-outline-primary"
+                   href="{% url 'adminstats' page='neteller' subpage='registrations' %}"
+                   style="padding: 5px 15px 5px 15px; font-size: 11px; ">
+                    Registrations
+                </a>
+
+
+            </div>
+            <div class="table-responsive" style="margin-top:20px">
+
+                <br/><br/>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <label for="net_ap_vipStatus">Active Status</label>
+                                <select class="form-control" name="net_ap_vipStatus" id="net_ap_vipStatus">
+                                    <option value="0">Active Status</option>
+                                    <option value="1">Pending</option>
+                                    <option value="2">Approved</option>
+                                    <option value="3">Rejected</option>
+                                </select>
+
+                            </div>
+
+                            <div class="col-md-2">
+                                <label for="net_ap_netellerid">Neteller ID</label>
+                                <input class="form-control" type="number" name="net_ap_netellerid"
+                                       id="net_ap_netellerid">
+                            </div>
+
+                            <div class="col-md-2">
+                                <label for="net_ap_partnercode">Choose Partner Code</label>
+                                <input class="form-control" type="number" name="net_ap_partnercode"
+                                       id="net_ap_partnercode">
+                            </div>
+
+                            <div class="col-md-2">
+                                <label for="net_ap_datefrom">Date From</label>
+                                <input required class="form-control" type="date" name="net_ap_datefrom"
+                                       id="net_ap_datefrom">
+                            </div>
+
+                            <div class="col-md-2">
+                                <label for="net_ap_dateto">Date To</label>
+                                <input required class="form-control" type="date" name="net_ap_dateto"
+                                       id="net_ap_dateto">
+                            </div>
+
+                            <div class="col-md-2">
+                                <br/>
+                                <button class="btn btn-success" type="submit" name="net_ap_submit"
+                                        value="net_ap_submit_val">Search
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                <br/><br/>
+
+
+                {% if neteller_acc_upgrade_status %}
+                <div class="alert alert-primary" role="alert" style="margin: 20px 0px 70px 0px;">
+                    <H3 style="color: white;">{{neteller_acc_upgrade_status}}</H3>
+                </div>
+                {% endif %}
+
+
+                <table class="table align-items-center table-flush">
+                    <thead>
+                    <tr>
+                        <th>Neteller ID</th>
+                        <th>Partner Code</th>
+                        <th>Date</th>
+                        <th>VIP Upgradation</th>
+
+
+                    </tr>
+                    </thead>
+                    {% for application in neteller_applications %}
+                    <tbody class="list">
+                    <tr>
+                        <td>{{application.Neteller_ID}}</td>
+                        <td>{{ application.Partner_code }}</td>
+                        <td>{{ application.Date }}</td>
+                        <td>
+                            {% if application.VipStatus == 0 %}
+                            <form method="post"
+                                  onSubmit="if(!confirm('Are you sure about sending the request?')){return false;}">
+                                {% csrf_token %}
+                                <input type="hidden" name="vipreq_neteller_acc" value="{{application.Neteller_ID}}">
+                                <button type="submit" name="net_send_viopreq" value="net_send_vipreq_val"
+                                        class="btn btn-sm btn-outline-primary">Send Request
+                                </button>
+                            </form>
+                            {% elif application.VipStatus == 1 %}
+                            <button class="btn btn-sm btn-outline-danger">Request Pending</button>
+                            {% elif application.VipStatus == 2 %}
+                            <button class="btn btn-sm btn-success">Request Accepted</button>
+                            {% elif application.VipStatus == 3 %}
+                            <button class="btn btn-sm btn-outline-dark">Request Rejected</button>
+                            {% endif %}
+
+                        </td>
+
+
+                    </tr>
+                    </tbody>
+                    {% endfor %}
+                </table>
+
+
+                <div class="card-footer py-4">
+                    <nav aria-label="...">
+                        <div class="col-lg-offset-9">
+                            <div class="pagination">
+                                    <span class="step-links">
+                                        {% if neteller_applications.has_previous %}
+                                            <a href="?page=1">&laquo; first || </a>
+                                            <a href="?page={{ neteller_applications.previous_page_number }}">previous</a>
+                                        {% endif %}
+                                        <span class="current">
+                                            Page {{ neteller_applications.number }} of {{ neteller_applications.paginator.num_pages }}.
+                                        </span>
+                                        {% if neteller_applications.has_next %}
+                                            <a href="?page={{ neteller_applications.next_page_number }}">next ||</a>
+                                            <a href="?page={{ neteller_applications.paginator.num_pages }}">last &raquo;</a>
+                                        {% endif %}
+                                    </span>
+                            </div>
+                        </div>
+                    </nav>
+                </div>
+
+            </div>
+            {% endif %}
+
+            {% if page_is == "neteller" and subpage_is == "registrations" %}
+            <div class="btn-group btn-group-toggle">
+                <a class="btn btn-outline-primary"
+                   href="{% url 'adminstats' page='neteller' subpage='deposits' %}"
+                   style="padding: 5px 15px 5px 15px; font-size: 11px; ">
+                    Deposits
+                </a>
+                <a class="btn btn-outline-primary"
+                   href="{% url 'adminstats' page='neteller' subpage='applications' %}"
+                   style="padding: 5px 15px 5px 15px; font-size: 11px; ">
+                    Applications
+                </a>
+                <a class="btn btn-outline-primary active"
+                   href="{% url 'adminstats' page='neteller' subpage='registrations' %}"
+                   style="padding: 5px 15px 5px 15px; font-size: 11px; ">
+                    Registrations
+                </a>
+
+
+            </div>
+            <br/><br/><br/>
+            <form method="post">
+                {% csrf_token %}
+                <div class="container">
+                    <div class="row">
+
+                        <div class="col-md-2">
+                            <label for="net_reg_netellerid">Neteller ID</label>
+                            <input class="form-control" type="number" name="net_reg_netellerid" id="net_reg_netellerid">
+                        </div>
+
+                        <div class="col-md-2">
+                            <label for="net_reg_siteid">Site Id</label>
+                            <input class="form-control" type="number" name="net_reg_siteid" id="net_reg_siteid">
+                        </div>
+                        <div class="col-md-2">
+                            <label for="net_reg_partnercode">Choose Partner Code</label>
+                            <input class="form-control" type="number" name="net_reg_partnercode"
+                                   id="net_reg_partnercode">
+                        </div>
+
+
+                        <div class="col-md-2">
+                            <label for="net_reg_datefrom">Date From</label>
+                            <input required class="form-control" type="date" name="net_reg_datefrom"
+                                   id="net_reg_datefrom">
+                        </div>
+
+                        <div class="col-md-2">
+                            <label for="net_reg_dateto">Date To</label>
+                            <input required class="form-control" type="date" name="net_reg_dateto" id="net_reg_dateto">
+                        </div>
+
+                        <div class="col-md-2">
+                            <br/>
+                            <button class="btn btn-success" type="submit" name="net_reg_submit"
+                                    value="net_reg_submit_val">Search
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <br/><br/>
+            <div class="table-responsive" style="margin-top: 80px">
+
+
+                <table class="table align-items-center table-flush">
+                    <thead>
+                    <tr style="font-weight: bold;">
+                        <th>Neteller ID</th>
+                        <th>Site ID</th>
+                        <th>Partner Code</th>
+                        <th>Date</th>
+                        <th>Status</th>
+
+                    </tr>
+                    </thead>
+                    {% for signups in neteller_signups %}
+                    <tbody>
+                    <tr>
+                        <td>{{signups.Neteller_ID}}</td>
+                        <td>{{ signups.Site_ID }}</td>
+                        <td>{{ signups.Partner_code }}</td>
+                        <td>{{ signups.Date }}</td>
+                        <td>
+
+                            {% if signups.VipStatus == 0 %}
+
+                            <button type="submit" class="btn btn-sm btn-outline-primary">Not Requested</button>
+
+                            {% elif signups.VipStatus == 1 %}
+                            <button class="btn btn-sm btn-outline-danger">Request Pending</button>
+                            {% elif signups.VipStatus == 2 %}
+                            <button class="btn btn-sm btn-success">Request Accepted</button>
+                            {% elif signups.VipStatus == 3 %}
+                            <button class="btn btn-sm btn-outline-dark">Request Rejected</button>
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+                    </tbody>
+                    {% endfor %}
+                </table>
+
+
+                <div class="card-footer py-4">
+                    <nav aria-label="...">
+                        <div class="col-lg-offset-9">
+                            <div class="pagination">
+                                    <span class="step-links">
+                                        {% if neteller_signups.has_previous %}
+                                            <a href="?page=1">&laquo; first || </a>
+                                            <a href="?page={{ neteller_signups.previous_page_number }}">previous</a>
+                                        {% endif %}
+                                        <span class="current">
+                                            Page {{ neteller_signups.number }} of {{ neteller_signups.paginator.num_pages }}.
+                                        </span>
+                                        {% if neteller_signups.has_next %}
+                                            <a href="?page={{ neteller_signups.next_page_number }}">next ||</a>
+                                            <a href="?page={{ neteller_signups.paginator.num_pages }}">last &raquo;</a>
+                                        {% endif %}
+                                    </span>
+                            </div>
+                        </div>
+                    </nav>
+                </div>
+
+            </div>
+            {% endif %}
+
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="net_gb_netid_details" tabindex="-1" role="dialog" aria-labelledby="net_gb_netid_details"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table table-stripped">
+                        <tr style="font-weight: bold">
+                            <td> ID</td>
+                            <td>Site ID</td>
+                            <td>Deposits</td>
+                            <td>Profit</td>
+                            <td>Date</td>
+
+                        </tr>
+                        {% for theid in id_gb_details %}
+                        <tr>
+                            <td>{{theid.Neteller_ID}}</td>
+                            <td>{{ theid.Site_ID }}</td>
+                            <td> ${{ theid.Deposite }}</td>
+                            <td> ${{nid.FinalCommssion}}</td>
+                            <td>{{ theid.Date }}</td>
+
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

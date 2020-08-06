@@ -1,0 +1,242 @@
+{% extends "sadmintemplates/header.html" %}
+{% block content %}
+
+<br/>
+<!-- Page content -->
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="btn-group btn-group-toggle">
+                <a class="btn btn-outline-primary"
+                   href="{% url 'netreceivables' platform='Neteller' %}"
+                   style="padding: 15px 75px 15px 75px; font-size: 15px; color: green; {{netellerbuttionactive}} ">
+                    Neteller
+                </a>
+
+                <a class="btn btn-outline-primary"
+                   href="{% url 'netreceivables' platform='Skrill' %}"
+                   style="padding: 15px 75px 15px 75px; font-size: 15px; color: purple; {{skrillbuttionactive}}">
+                    Skrill
+                </a>
+
+            </div>
+            <br/><br/><br/>
+        </div>
+    </div>
+
+    {% if platform == "Neteller" %}
+    <div class="row">
+        <div class="col-md-6">
+
+            <br/>
+            <h2>Current Net Receivables: ${{current_net_balance}}</h2>
+            <br/> <br/>
+            <H3>Total Revenue: ${{total_revenue_neteller_deposit}}</H3>
+
+            <div class="table-responsive">
+                <table class="table table-stripped">
+                    <tr>
+                        <th>Month</th>
+                        <th>Deposits</th>
+                        <th>Revenue</th>
+                    </tr>
+                    {% for nit in netellerMonthly %}
+                    <tr>
+                        <td>{{nit.month}}</td>
+                        <td>${{nit.d}}</td>
+                        <td>${{nit.c}}</td>
+                    </tr>
+
+                    {% endfor %}
+                </table>
+
+                <br/>
+
+
+            </div>
+
+        </div>
+        <div class="col-md-6">
+
+            <br/> <br/><br/>
+            {% if responsetext %}
+            <div class="alert alert-primary" role="alert" style="margin: 20px 0px 20px 0px;">
+                <H3 style="color: white;">{{responsetext}}</H3>
+            </div>
+            {% endif %}
+            <br/><br/>
+            <H3>Total Received: ${{net_rcv_total}}
+                <button class="btn btn-sm btn-outline-success pull-right" data-toggle="modal"
+                        data-target="#addapayment">Add a payment
+                </button>
+            </H3>
+
+            <div class="table-responsive">
+                <table class="table table-stripped">
+                    <tr>
+                        <th>Date</th>
+                        <th>Amount</th>
+                    </tr>
+                    {% for nc in net_rcv_all %}
+                    <tr>
+                        <td>{{nc.datecreation}}</td>
+                        <td>${{nc.amount}}</td>
+                    </tr>
+
+                    {% endfor %}
+                </table>
+
+                <br/>
+
+
+            </div>
+
+        </div>
+
+    </div>
+    {% endif %}
+
+    {% if platform == "Skrill" %}
+    <div class="row">
+        <div class="col-md-6">
+
+            <br/>
+            <h2>Current Net Receivables: £{{current_skr_balance}}</h2>
+            <br/> <br/>
+            <H3>Total Revenue: £{{total_revenue_skrill_deposit}}</H3>
+
+            <div class="table-responsive">
+                <table class="table table-stripped">
+                    <tr>
+                        <th>Month</th>
+                        <th>Deposits</th>
+                        <th>Revenue</th>
+                    </tr>
+                    {% for nit in skrillMonthly %}
+                    <tr>
+                        <td>{{nit.month}}</td>
+                        <td>£{{nit.d}}</td>
+                        <td>£{{nit.c}}</td>
+                    </tr>
+
+                    {% endfor %}
+                </table>
+
+                <br/>
+
+
+            </div>
+
+        </div>
+        <div class="col-md-6">
+
+            <br/> <br/><br/>
+            {% if responsetext %}
+            <div class="alert alert-primary" role="alert" style="margin: 20px 0px 20px 0px;">
+                <H3 style="color: white;">{{responsetext}}</H3>
+            </div>
+            {% endif %}
+            <br/><br/>
+            <H3>Total Received: £{{net_rcv_total}}
+                <button class="btn btn-sm btn-outline-danger pull-right" data-toggle="modal"
+                        data-target="#addapaymentskr">Add a payment
+                </button>
+            </H3>
+
+            <div class="table-responsive">
+                <table class="table table-stripped">
+                    <tr>
+                        <th>Date</th>
+                        <th>Amount</th>
+                    </tr>
+                    {% for nc in net_rcv_all %}
+                    <tr>
+                        <td>{{nc.datecreation}}</td>
+                        <td>£{{nc.amount}}</td>
+                    </tr>
+
+                    {% endfor %}
+                </table>
+
+                <br/>
+
+            </div>
+
+        </div>
+
+    </div>
+    {% endif %}
+
+
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="addapayment" tabindex="-1" role="dialog" aria-labelledby="addapayment"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Adding a Payment from Neteller</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <form method="post">
+                {% csrf_token %}
+
+                <div class="modal-body">
+                    <p class="text-success">Enter Amount: (USD)</p>
+                    <input type="number" required name="neteller_amount" class="form-control"
+                           placeholder="Enter an amount.." step="0.01"/>
+
+                    <input type="hidden" name="platform" value="Neteller"/>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Add</button>
+                </div>
+
+            </form>
+
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="addapaymentskr" tabindex="-1" role="dialog" aria-labelledby="addapaymentskr"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Adding a Payment from Skrill</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <form method="post">
+                {% csrf_token %}
+
+                <div class="modal-body">
+                    <p class="text-success">Enter Amount: (USD)</p>
+                    <input type="number" required name="skrill_amount" class="form-control"
+                           placeholder="Enter an amount.." step="0.01"/>
+
+                    <input type="hidden" name="platform" value="Skrill"/>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Add</button>
+                </div>
+
+            </form>
+
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

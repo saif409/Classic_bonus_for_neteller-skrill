@@ -1,0 +1,92 @@
+{% extends "sadmintemplates/header.html" %}
+{% block content %}
+
+<br/>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <!-- Card header -->
+                <div class="card-header border-0">
+                    <h3 class="mb-0">All Neteller Sign-up list
+                        <a class="btn btn-primary btn-sm float-right" href="{% url 'skrill_signup' %}" >
+                            Skrill Signups
+                        </a>
+                       <a class="mr-2 btn btn-neutral btn-sm float-right" href="{% url 'neteller_signup' %}" >
+                            Neteller Signup
+                        </a>
+                    </h3>
+
+                </div>
+
+                <!-- Light table -->
+                <div class="table-responsive">
+                    <table class="table align-items-center table-flush">
+                        <thead class="thead-light">
+                        <tr>
+                            <th scope="col" class="sort" data-sort="name">Sl NO</th>
+                            <th scope="col" class="sort" data-sort="name">Name</th>
+                            <th scope="col" class="sort" data-sort="name">Email/th>
+                            <th scope="col" class="sort" data-sort="budget">Subject</th>
+                            <th scope="col">Date</th>
+                             <th scope="col">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody class="list">
+                        {% for u in user_request %}
+                        <tr>
+                            <td scope="row"><span class="name mb-0 text-sm">{{ forloop.counter }}</span></td>
+                            <td scope="row"><span class="name mb-0 text-sm">{{ u.agents_name }}</span></td>
+                            <td><span class="status">{{ u.agents_email }}</span></td>
+                            <td><span class="status">{{ u.subject }}</span></td>
+                            <td><span class="status">{{ u.Submited_date }}</span></td>
+
+                            <td>
+                                <div class="dropdown">
+                                    <a class="btn btn-sm btn-icon-only text-light" href="#" role="button"
+                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                                        <a class="dropdown-item" href="">View Message</a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Card footer -->
+
+                <div class="card-footer py-4">
+                    <nav aria-label="...">
+                          <div class="col-lg-offset-9">
+                                <div class="pagination">
+                                    <span class="step-links">
+                                        {% if data.has_previous %}
+                                            <a href="?page=1">&laquo; first || </a>
+                                            <a href="?page={{ data.previous_page_number }}">previous</a>
+                                        {% endif %}
+                                        <span class="current">
+                                            Page {{ data.number }} of {{ data.paginator.num_pages }}.
+                                        </span>
+                                        {% if data.has_next %}
+                                            <a href="?page={{ data.next_page_number }}">next ||</a>
+                                            <a href="?page={{ data.paginator.num_pages }}">last &raquo;</a>
+                                        {% endif %}
+                                    </span>
+                                 </div>
+                           </div>
+                    </nav>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
